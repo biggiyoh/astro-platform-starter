@@ -1,24 +1,29 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Soirées</title>
+  <title>PartyMap Malta</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div id="app">
 
     <header id="topbar">
-      <div id="logo">✦ Soirées</div>
-      <p id="tagline">Découvrez les soirées près de chez vous</p>
+      <div id="logo">
+        <span id="logo-icon">⚡</span>
+        <span>PartyMap</span><span id="logo-malta">Malta</span>
+      </div>
+      <p id="tagline">Find tonight's hottest events on the island</p>
     </header>
 
     <div id="map"></div>
 
     <div id="panel">
-      <button id="close-btn" aria-label="Fermer">✕</button>
+      <button id="close-btn" aria-label="Close">✕</button>
 
       <div id="panel-inner">
         <div id="event-info">
@@ -31,7 +36,7 @@
           </div>
           <p id="event-desc"></p>
           <a id="book-btn" href="#" target="_blank" rel="noopener">
-            Réserver ma place →
+            Get my ticket →
           </a>
         </div>
 
@@ -39,14 +44,14 @@
           <div id="chat-header">
             <div id="chat-avatar">💬</div>
             <div>
-              <strong>Discussion de la soirée</strong>
-              <small>Chat public · Posez vos questions</small>
+              <strong>Event Chat</strong>
+              <small>Public · Ask anything about this event</small>
             </div>
           </div>
           <div id="messages"></div>
           <div id="chat-input-area">
-            <input type="text" id="chat-input" placeholder="Écrire un message…" autocomplete="off">
-            <button id="send-btn" aria-label="Envoyer">
+            <input type="text" id="chat-input" placeholder="Write a message…" autocomplete="off">
+            <button id="send-btn" aria-label="Send">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="22" y1="2" x2="11" y2="13"></line>
                 <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>

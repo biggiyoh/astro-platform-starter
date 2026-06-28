@@ -1,8 +1,7 @@
 (() => {
-  // ── Map init ────────────────────────────────────
   const map = L.map('map', {
-    center: [48.858, 2.347],
-    zoom: 13,
+    center: [35.9154, 14.4286],
+    zoom: 12,
     zoomControl: false,
   });
 
@@ -13,7 +12,6 @@
 
   L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-  // ── DOM refs ────────────────────────────────────
   const panel      = document.getElementById('panel');
   const closeBtn   = document.getElementById('close-btn');
   const eventTag   = document.getElementById('event-tag');
@@ -29,7 +27,6 @@
 
   let activeEvent = null;
 
-  // ── Helpers ─────────────────────────────────────
   function setCssColor(color) {
     document.documentElement.style.setProperty('--event-color', color);
   }
@@ -48,34 +45,27 @@
   }
 
   function nowTime() {
-    return new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    return new Date().toLocaleTimeString('en-MT', { hour: '2-digit', minute: '2-digit' });
   }
 
-  // ── Open panel ──────────────────────────────────
   function openPanel(event) {
     activeEvent = event;
-
     setCssColor(event.color);
-    eventTag.textContent   = event.tag;
+    eventTag.textContent      = event.tag;
     eventTag.style.background = event.color;
-    eventTitle.textContent = event.title;
-    eventDate.textContent  = event.date;
-    eventLoc.textContent   = event.location;
-    eventSpots.textContent = event.spots;
-    eventDesc.textContent  = event.description;
-    bookBtn.href           = event.bookingUrl;
-    bookBtn.style.background = event.color;
-
+    eventTitle.textContent    = event.title;
+    eventDate.textContent     = event.date;
+    eventLoc.textContent      = event.location;
+    eventSpots.textContent    = event.spots;
+    eventDesc.textContent     = event.description;
+    bookBtn.href              = event.bookingUrl;
     messages.innerHTML = '';
     event.chat.forEach(msg => renderMessage(msg));
-
     panel.classList.add('open');
     chatInput.focus();
-
     map.panTo([event.lat, event.lng], { animate: true, duration: .4 });
   }
 
-  // ── Close panel ─────────────────────────────────
   function closePanel() {
     panel.classList.remove('open');
     activeEvent = null;
@@ -84,26 +74,17 @@
   closeBtn.addEventListener('click', closePanel);
   map.on('click', closePanel);
 
-  // ── Send message ────────────────────────────────
   function sendMessage() {
     const text = chatInput.value.trim();
     if (!text) return;
-
-    renderMessage({
-      author: 'Vous',
-      avatar: '🙂',
-      text,
-      time: nowTime(),
-    }, true);
-
+    renderMessage({ author: 'You', avatar: '🙂', text, time: nowTime() }, true);
     chatInput.value = '';
     chatInput.focus();
-
     setTimeout(() => {
       renderMessage({
-        author: 'Hôte',
+        author: 'Host',
         avatar: activeEvent ? activeEvent.chat[0].avatar : '👋',
-        text: 'Merci pour votre message ! Nous y répondrons très bientôt 😊',
+        text: "Thanks for your message! We'll get back to you very soon 🙌",
         time: nowTime(),
       });
     }, 1200);
@@ -112,24 +93,19 @@
   sendBtn.addEventListener('click', sendMessage);
   chatInput.addEventListener('keydown', e => { if (e.key === 'Enter') sendMessage(); });
 
-  // ── Place markers ───────────────────────────────
   EVENTS.forEach(event => {
     const label = event.title.split(' ').slice(0, 2).join('<br>');
-
     const icon = L.divIcon({
       className: '',
       html: `
-        <div class="event-bubble">
+        <div class="event-bubble" style="--bubble-glow:${event.color}">
           <div class="event-bubble-pulse" style="background:${event.color}"></div>
           <div class="event-bubble-inner" style="background:${event.color}">${label}</div>
         </div>`,
-      iconSize: [52, 52],
-      iconAnchor: [26, 26],
+      iconSize: [56, 56],
+      iconAnchor: [28, 28],
     });
-
-    const marker = L.marker([event.lat, event.lng], { icon })
-      .addTo(map);
-
+    const marker = L.marker([event.lat, event.lng], { icon }).addTo(map);
     marker.on('click', e => {
       L.DomEvent.stopPropagation(e);
       openPanel(event);
